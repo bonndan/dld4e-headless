@@ -1,0 +1,45 @@
+diagram:
+  fill: "white"
+  rows: 6
+  columns: 6
+  gridLines: true
+title:
+  color: black
+  fill: none
+  logoFill: white
+  logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
+  stroke: black
+  text: "Groups"
+  type: box
+cisco: &cisco
+  color: "#004BAF"
+  fill: "white"
+  iconFamily: "cisco"
+  iconFill: "#004BAF"
+  iconStrokeWidth: .25
+  preserveWhite: true
+  stroke: "#004BAF"
+icons:
+  router1: {<<: *cisco, x: 0, y: 5, icon: "router"}
+  router2: {<<: *cisco, x: 2, y: 5, icon: "router"}
+  router3: {<<: *cisco, x: 0, y: 3, icon: "router"}
+  router4: {<<: *cisco, x: 2, y: 3, icon: "router"}
+  router5: {<<: *cisco, x: 3, y: 2, icon: "router"}
+  router6: {<<: *cisco, x: 5, y: 2, icon: "router"}
+  router7: {<<: *cisco, x: 3, y: 0, icon: "router"}
+  router8: {<<: *cisco, x: 5, y: 0, icon: "router"}
+group: &group
+  - { stroke: "black", fill: "none", color: black }
+groups:
+ - { <<: *group, name: topLeft, members: [router1, router2, router3, router4] }
+ - { <<: *group, textLocation: "topMiddle", name: topMiddle, members: [router1, router2, router3, router4] }
+ - { <<: *group, textLocation: "topRight", name: topRight, members: [router1, router2, router3, router4] }
+ - { <<: *group, textLocation: "bottomLeft", name: bottomLeft, members: [router1, router2, router3, router4] }
+ - { <<: *group, textLocation: "bottomMiddle", name: bottomMiddle, members: [router1, router2, router3, router4] }
+ - { <<: *group, textLocation: "bottomRight", name: bottomRight, members: [router1, router2, router3, router4] }
+ - { <<: *group, textLocation: "leftTop", name: leftTop, members: [router5, router6, router7, router8] }
+ - { <<: *group, textLocation: "leftMiddle", name: leftMiddle, members: [router5, router6, router7, router8] }
+ - { <<: *group, textLocation: "leftBottom", name: leftBottom, members: [router5, router6, router7, router8] }
+ - { <<: *group, textLocation: "rightTop", name: rightTop, members: [router5, router6, router7, router8] }
+ - { <<: *group, textLocation: "rightMiddle", name: rightMiddle, members: [router5, router6, router7, router8] }
+ - { <<: *group, textLocation: "rightBottom", name: rightBottom, members: [router5, router6, router7, router8] }

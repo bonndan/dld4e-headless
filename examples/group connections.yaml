@@ -1,0 +1,60 @@
+diagram:
+  fill: "white"
+  rows: 4
+  columns: 10
+  gridLines: false
+  aspectRatio: "10:4"
+title:
+  color: black
+  logoFill: white
+  text: "Group Connections"
+  fill: none
+  stroke: "black"
+  type: "bar"
+cisco: &cisco
+  stroke: "none"
+  color: "lightgrey"
+  iconFill: "darkslategrey"
+  iconStroke: "lightgrey"
+  iconStrokeWidth: .25
+  iconFamily: "cisco"
+  fill: "none"
+  preserveWhite: "true"
+spine: &spine
+  <<: *cisco
+  x: "+1"
+  icon: "nexus7000"
+  textLocation: "topMiddle"
+leaf: &leaf
+  <<: *cisco
+  x: "+1"
+  icon: "nexus2000"
+icons:
+  spine1: {<<: *spine, x: 3, y: 3}
+  spine2: {<<: *spine }
+  spine3: {<<: *spine }
+  spine4: {<<: *spine }
+  leaf 1: {<<: *leaf, x: 1, y: 1}
+  leaf 2: {<<: *leaf }
+  leaf 3: {<<: *leaf }
+  leaf 4: {<<: *leaf }
+  leaf 5: {<<: *leaf }
+  leaf 6: {<<: *leaf }
+  leaf 7: {<<: *leaf }
+  leaf 8: {<<: *leaf }
+group: &group
+  fill: "none"
+  color: darkslategray
+  stroke: lightgrey
+groups:
+  spines: { <<: *group, textLocation: leftMiddle, name: Spine, members: [spine1, spine2, spine3, spine4] }
+  rack1: { <<: *group, textLocation: bottomMiddle, name: Rack1, members: [leaf 1, leaf 2] }
+  rack2: { <<: *group, textLocation: bottomMiddle, name: Rack2, members: [leaf 3, leaf 4] }
+  rack3: { <<: *group, textLocation: bottomMiddle, name: Rack3, members: [leaf 5, leaf 6] }
+  rack4: { <<: *group, textLocation: bottomMiddle, name: Rack4, members: [leaf 7, leaf 8] }
+  leaves: { <<: *group, textLocation: leftMiddle, name: Leaf, members: [rack1,rack2,rack3,rack4] }
+connection: &connection
+  color: "lightgrey"
+  stroke: "darkslategrey"
+connections:
+  - { <<: *connection, endpoints: [spines:40Gb,leaves:40Gb] }

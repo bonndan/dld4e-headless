@@ -1,0 +1,32 @@
+diagram:
+  aspectRatio: "14:8.5"
+  columns: 7
+  fill: "lightgrey"
+  rows: 5
+title:
+  color: black
+  fill: "none"
+  logoFill: none
+  stroke: "black"
+  text: "Curves"
+  type: "bar"
+azure: &azure
+  color: "black"
+  fill: "darkgrey"
+  iconFamily: "azureEnterprise"
+  iconFill: "white"
+  iconStroke: "none"
+  stroke: "none"
+icons:
+  serverrack1: {<<: *azure, x: 0, y: 4, icon: "serverrack"}
+  serverrack2: {<<: *azure, x: 3, y: 2, icon: "serverrack"}
+  serverrack3: {<<: *azure, x: 6, y: 0, icon: "serverrack"}
+connection: &connection
+  color: "black"
+  stroke: "black"
+  strokeDashArray: "0,0"
+connections:
+  - { <<: *connection, curve: curveLinear, endpoints: ["serverrack1:curveLinear", "serverrack2:curveLinear"] }
+  - { <<: *connection, curve: curveStepBefore, endpoints: ["serverrack1:curveStepBefore", "serverrack2:curveStepBefore"] }
+  - { <<: *connection, curve: curveStepAfter, endpoints: ["serverrack1:curveStepAfter", "serverrack2:curveStepAfter"] }
+  - { <<: *connection, curve: curveStep, endpoints: ["serverrack2:curveStep", "serverrack3:curveStep"] }
