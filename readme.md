@@ -4,6 +4,14 @@ Send dld4e.com yaml files to this service to obtain server side rendered network
 
 See dld4e.com
 
+## Usage
+
+So far it does not work properly. Test with
+
+        npm install
+        node src/index.js
+        curl -X POST -d examples/groups.yml http://localhost:3030 > test.svg
+
 
 ## License
 
