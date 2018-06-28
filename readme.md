@@ -6,11 +6,11 @@ See dld4e.com
 
 ## Usage
 
-So far it does not work properly. Test with
+ Test with
 
         npm install
         node src/index.js
-        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml" --data-binary @- http://localhost:3030 > test.svg
+        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml" --data-binary @- http://localhost:3030 > /tmp/groups.svg
 
 
 ## License
