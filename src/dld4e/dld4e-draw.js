@@ -58,7 +58,7 @@ function draw(doc, d3n) {
   //document.body.style.background = diagram.fill
 
   // find a good fit for the diagram
-  var parentBox = {bottom: 0, height: 2048, left: 0, right: 0, top: 0, width: 2048} //d3.select(d3n.document.querySelector("#svg")).node().getBoundingClientRect()
+  var parentBox = { bottom: 0, height: 2048, left: 0, right: 0, top: 0, width: 2048 } //d3.select(d3n.document.querySelector("#svg")).node().getBoundingClientRect()
   var ratios = diagram.aspectRatio.split(':')
 
   // set the desired h/w
@@ -129,8 +129,11 @@ function draw(doc, d3n) {
   _gridlines.drawGridLines(svg, diagram)
   _groups.drawGroups(svg, diagram, groups, icons)
   _conns.drawConnections(svg, diagram, connections, icons, notes)
-  _icons.drawIcons(svg, diagram, icons, diagram.iconTextRatio)
+  let promises = _icons.drawIcons(svg, diagram, icons, diagram.iconTextRatio)
+
   _notes.drawNotes(svg, diagram, notes)
+
+  console.log("Finished drawing " + title.text)
 
   // move all the labels to the front
   svg.selectAll('.connectionLabel')
@@ -139,6 +142,8 @@ function draw(doc, d3n) {
     .each(function (d) { d3.select(this).moveToFront(); })
   svg.selectAll('.iconLabel')
     .each(function (d) { d3.select(this).moveToFront(); })
+
+  return promises
 };
 
 module.exports.draw = draw;

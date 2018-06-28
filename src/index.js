@@ -9,10 +9,8 @@ const yaml = require('js-yaml');
 const D3Node = require('d3-node')
 const draw = require('../src/dld4e/dld4e-draw.js');
 
-//
-//const jsdom = require('jsdom');
-//const { JSDOM } = jsdom;
-//const fakeDom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+//serving static assets as workaround
+app.use('/images', express.static('images'));
 
 
 
@@ -21,7 +19,7 @@ app.use(bodyParser.text({type: "*/*"}));
 
 app.post('/', function (req, res) {
 
-    console.log('Received request');
+    console.log('Received request')
 
     const options = { selector: '#svg', container: '<div id="container"><div id="svg"></div></div>' }
     const d3n = new D3Node(options) // initializes D3 with container element
@@ -32,13 +30,19 @@ app.post('/', function (req, res) {
     
     
     //load incoming yaml
-    var doc = yaml.load(req.body);
+    var doc = yaml.load(req.body)
+
+    res.setHeader("content-type", "image/svg+xml")
 
     // draw on your canvas
-    draw.draw(doc, d3n);
-
-    res.setHeader("content-type", "image/svg+xml");
-    res.send(d3n.svgString())
+    Promise.all(draw.draw(doc, d3n)).then( 
+        function() {
+        console.log(d3n.svgString())
+        res.send(d3n.svgString())   
+    }) 
+    
+    
+    
     // output canvas to png
     // https://github.com/d3-node/d3-node
     //res.setHeader("content-type", "image/png");
@@ -46,5 +50,5 @@ app.post('/', function (req, res) {
 });
 
 app.listen(3030, function () {
-    console.log('Dld4e app listening on port 3030!');
+    console.log('Dld4e app listening on port 3030!')
 });

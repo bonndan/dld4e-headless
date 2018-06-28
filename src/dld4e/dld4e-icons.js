@@ -1,3 +1,11 @@
+
+/**
+ * Returns an array of promises
+ * @param {*} svg 
+ * @param {*} diagram 
+ * @param {*} icons 
+ * @param {*} iconTextRatio 
+ */
 var drawIcons = function (svg, diagram, icons, iconTextRatio) {
 
   const _process = require('./dld4e-process');
@@ -49,73 +57,87 @@ var drawIcons = function (svg, diagram, icons, iconTextRatio) {
     .attr("text-anchor", function (d) { return d.value.textPosition.textAnchor })
     .attr("dominant-baseline", "central")
 
-  var icon = cells
-    .each(function (d) {
-      var cell = d3n.document.querySelector("#" + d.key);
-      //d3.select(d3n.document.querySelector('#svg')).select(d.key).node(); // document.getElementById()
-      var cellText = d3n.document.querySelector("#" + d.key + "-text"); //document.getElementById(d.key + "-text")
-      var fontSize = Math.ceil(parseFloat(cellText.style.fontSize))
+  /**
+   * Returns a promise
+   * @param {cell} d 
+   */
+  var handleCell = function (d) {
+    var cell = d3n.document.querySelector("#" + d.key)
+    var cellText = d3n.document.querySelector("#" + d.key + "-text")
+    var fontSize = Math.ceil(parseFloat(cellText.style.fontSize))
 
+    // center
+    var x = (d.value.width * d.value.iconPaddingX)
+    var y = (d.value.height * d.value.iconPaddingY)
+    var width = d.value.width * (1 - 2 * d.value.iconPaddingX)
+    var height = (d.value.height) * (1 - 2 * d.value.iconPaddingY)
+    switch (true) {
+      case d.value.textLocation.startsWith('top'):
+        y += fontSize
+        height = (d.value.height - fontSize) * (1 - 2 * d.value.iconPaddingY)
+        break;
+      case d.value.textLocation.startsWith('left'):
+        x += fontSize
+        width = (d.value.width - fontSize) * (1 - 2 * d.value.iconPaddingX)
+        break;
+      case d.value.textLocation.startsWith('right'):
+        width = (d.value.width - fontSize) * (1 - 2 * d.value.iconPaddingX)
+        break;
+      case d.value.textLocation.startsWith('bottom'):
+        height = (d.value.height - fontSize) * (1 - 2 * d.value.iconPaddingY)
+        break;
+    }
 
-      // center
-      var x = (d.value.width * d.value.iconPaddingX)
-      var y = (d.value.height * d.value.iconPaddingY)
-      var width = d.value.width * (1 - 2 * d.value.iconPaddingX)
-      var height = (d.value.height) * (1 - 2 * d.value.iconPaddingY)
-      switch (true) {
-        case d.value.textLocation.startsWith('top'):
-          y += fontSize
-          height = (d.value.height - fontSize) * (1 - 2 * d.value.iconPaddingY)
-          break;
-        case d.value.textLocation.startsWith('left'):
-          x += fontSize
-          width = (d.value.width - fontSize) * (1 - 2 * d.value.iconPaddingX)
-          break;
-        case d.value.textLocation.startsWith('right'):
-          width = (d.value.width - fontSize) * (1 - 2 * d.value.iconPaddingX)
-          break;
-        case d.value.textLocation.startsWith('bottom'):
-          height = (d.value.height - fontSize) * (1 - 2 * d.value.iconPaddingY)
-          break;
+    var url = "http://127.0.0.1:3030/images/" + d.value.iconFamily + "/" + d.value.icon + ".svg"
+    var local = __dirname + "/../../images/" + d.value.iconFamily + "/" + d.value.icon + ".svg"
+
+    const jsdom9 = require("d3-node/node_modules/jsdom")
+
+    //https://stackoverflow.com/questions/42649700/using-domparser-in-javascript-testing-with-mocha-and-jsdom
+    require('jsdom-global')()
+    global.DOMParser = window.DOMParser
+
+    var updateCell = function (xml) {
+      
+      var svg = xml.getElementsByTagName("svg")[0]
+      svg.setAttribute("x", x)
+      svg.setAttribute("y", y)
+      svg.setAttribute("width", width)
+      svg.setAttribute("height", height)
+      var paths = xml.getElementsByTagName("path")
+      for (i = 0; i < paths.length; i++) {
+        if ((d.value.preserveWhite) && (paths[i].getAttribute("fill") == '#fff')) {
+          //paths[i].setAttribute("fill", d.value.replaceWhite)
+        } else if ((d.value.iconFill) && (paths[i].getAttribute("fill") != 'none')) {
+          paths[i].setAttribute("fill", d.value.iconFill)
+        }
+        if ((d.value.iconStroke) && (paths[i].getAttribute("stroke") != 'none')) {
+          paths[i].setAttribute("stroke", d.value.iconStroke)
+        }
+        if ((d.value.iconStrokeWidth) && (paths[i].getAttribute("stroke-width"))) {
+          paths[i].setAttribute("stroke-width", d.value.iconStrokeWidth)
+        }
       }
 
-      var url = __dirname + "/../../images/" + d.value.iconFamily + "/" + d.value.icon + ".svg"
-      var fs = require('fs');
+      const frag = new jsdom9.jsdom(xml.documentElement.outerHTML) // fix for imported is not a NodeImpl
+      const newSvg = frag.getElementsByTagName("svg")[0]
+      cell.insertBefore(newSvg, cellText)
+    }
 
-      fs.readFile(url, function (err, data) {
-        if (err) {
-          throw err;
-        }
+    //then(
+    function readIcon(url) {
+      console.log("Reading icon " + url)
+      
+    }
 
-        var DOMParser = require('xmldom').DOMParser;
-        var xml = new DOMParser().parseFromString(data.toString(), 'text/xml')
+    return d3.svg(url).then(updateCell)
+  }
 
-        var svg = xml.getElementsByTagName("svg")[0]
-        svg.setAttribute("x", x)
-        svg.setAttribute("y", y)
-        svg.setAttribute("width", width)
-        svg.setAttribute("height", height)
-        var paths = xml.getElementsByTagName("path")
-        for (i = 0; i < paths.length; i++) {
-          if ((d.value.preserveWhite) && (paths[i].getAttribute("fill") == '#fff')) {
-            //paths[i].setAttribute("fill", d.value.replaceWhite)
-          } else if ((d.value.iconFill) && (paths[i].getAttribute("fill") != 'none')) {
-            paths[i].setAttribute("fill", d.value.iconFill)
-          }
-          if ((d.value.iconStroke) && (paths[i].getAttribute("stroke") != 'none')) {
-            paths[i].setAttribute("stroke", d.value.iconStroke)
-          }
-          if ((d.value.iconStrokeWidth) && (paths[i].getAttribute("stroke-width"))) {
-            paths[i].setAttribute("stroke-width", d.value.iconStrokeWidth)
-          }
-        }
-        
-        //TODO fix importedNode is not a NodeImpl
-        //cell.insertBefore(importedNode, cellText);
+  let cellArray = []
+  cells.each(function (d) {cellArray.push(d)})
+  
+  return cellArray.map(handleCell)
 
-      });
-
-    })
 }
 
 module.exports.drawIcons = drawIcons;
