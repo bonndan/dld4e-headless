@@ -15,7 +15,7 @@ var drawIcons = function (svg, diagram, icons, iconTextRatio) {
     .enter()
 
   var cells = deviceCellsAll.append("g")
-    .attr("id", function (d) { return d.key })
+    .attr("id", function (d) { return d.key.replace(new RegExp(" ", 'g'), "_") })
     .attr("transform", function (d) { return "translate(" + diagram.xBand(d.value.x) + "," + diagram.yBand(d.value.y) + ")" })
     .each(function (d) {
       if (d.value.metadata) {
@@ -51,7 +51,7 @@ var drawIcons = function (svg, diagram, icons, iconTextRatio) {
       }
     })
     .style("font-size", function (d) { return d.value.fontSize + "px"; })
-    .attr("id", function (d) { return d.key + '-text' })
+    .attr("id", function (d) { return d.key.replace(new RegExp(" ", 'g'), "_") + '-text' })
     .attr("transform", function (d) { return "translate(" + d.value.textPosition.x + "," + d.value.textPosition.y + ")rotate(" + d.value.textPosition.rotate + ")" })
     .attr('fill', function (d) { return d.value.color || "orange" })
     .attr("text-anchor", function (d) { return d.value.textPosition.textAnchor })
@@ -62,8 +62,9 @@ var drawIcons = function (svg, diagram, icons, iconTextRatio) {
    * @param {cell} d 
    */
   var handleCell = function (d) {
-    var cell = d3n.document.querySelector("#" + d.key)
-    var cellText = d3n.document.querySelector("#" + d.key + "-text")
+    
+    var cell = d3n.document.querySelector("#" + d.key.replace(new RegExp(" ", 'g'), "_"))
+    var cellText = d3n.document.querySelector("#" + d.key.replace(new RegExp(" ", 'g'), "_") + "-text")
     var fontSize = Math.ceil(parseFloat(cellText.style.fontSize))
 
     // center
@@ -98,7 +99,7 @@ var drawIcons = function (svg, diagram, icons, iconTextRatio) {
     global.DOMParser = window.DOMParser
 
     var updateCell = function (xml) {
-      
+
       var svg = xml.getElementsByTagName("svg")[0]
       svg.setAttribute("x", x)
       svg.setAttribute("y", y)
@@ -127,15 +128,15 @@ var drawIcons = function (svg, diagram, icons, iconTextRatio) {
     //then(
     function readIcon(url) {
       console.log("Reading icon " + url)
-      
+
     }
 
     return d3.svg(url).then(updateCell)
   }
 
   let cellArray = []
-  cells.each(function (d) {cellArray.push(d)})
-  
+  cells.each(function (d) { cellArray.push(d) })
+
   return cellArray.map(handleCell)
 
 }
