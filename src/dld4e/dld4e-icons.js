@@ -40,7 +40,7 @@ var drawIcons = function (svg, diagram, icons, iconTextRatio) {
     .attr('class', 'iconLabel')
     .text(function (d) { return d.value.text || d.key })
     .each(function (d) {
-      var textLength = 5; //d3.select(this).getComputedTextLength() TODO
+      var textLength = d3.select(this).node().getBoundingClientRect().width // was getComputedTextLength
       d.value.fontSize = Math.floor(Math.min(d.value.width * .9 / textLength * 12, d.value.height / 2 * iconTextRatio))
       d.value.textPosition = _process.textPositions(0, 0, d.value.width, d.value.height, d.value.fontSize + 2)[d.value.textLocation]
       if (d.value.url) {

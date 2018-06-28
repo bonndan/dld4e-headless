@@ -94,7 +94,7 @@ var drawConnections = function (svg, diagram, connections, icons, notes) {
           .style('font-size',  connectionLabelFontSize + 'px' )
           .attr('dy', connectionLabelFontSize)
           .attr('dx', function(d) {
-            return -startOffset - this.getComputedTextLength() - dxOffset
+            return -startOffset - d3.select(this).node().getBoundingClientRect().width - dxOffset
           })
           .append("textPath")
             .style("text-anchor","end")
