@@ -10,7 +10,7 @@ So far it does not work properly. Test with
 
         npm install
         node src/index.js
-        curl -X POST -d examples/groups.yml http://localhost:3030 > test.svg
+        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml" --data-binary @- http://localhost:3030 > test.svg
 
 
 ## License

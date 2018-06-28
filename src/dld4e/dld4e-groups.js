@@ -1,4 +1,6 @@
 var drawGroups = function (svg, diagram, groups, icons) {
+
+    const _process = require('./dld4e-process');
     for (var group in groups) {
       svg.append("rect")
          .attr("x", groups[group].x1)
@@ -14,7 +16,7 @@ var drawGroups = function (svg, diagram, groups, icons) {
 
 
       if (groups[group].name) {
-        var textLocation = textPositions(groups[group].x1,groups[group].y1,groups[group].x2,groups[group].y2, groups[group].fontSize + 2 )[groups[group].textLocation || 'topLeft']
+        var textLocation = _process.textPositions(groups[group].x1,groups[group].y1,groups[group].x2,groups[group].y2, groups[group].fontSize + 2 )[groups[group].textLocation || 'topLeft']
         svg.append("text")
           .attr('class', 'groupLabel')
           .text( groups[group].name )

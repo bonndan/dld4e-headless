@@ -2,11 +2,22 @@
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
+global.fetch = require('node-fetch-polyfill');
 
 //const canvasModule = require('canvas');
 const yaml = require('js-yaml');
 const D3Node = require('d3-node')
 const draw = require('../src/dld4e/dld4e-draw.js');
+
+//
+//const jsdom = require('jsdom');
+//const { JSDOM } = jsdom;
+//const fakeDom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+
+
+
+//https://stackoverflow.com/questions/18710225/node-js-get-raw-request-body-using-express
+app.use(bodyParser.text({type: "*/*"}));
 
 app.post('/', function (req, res) {
 
@@ -21,7 +32,7 @@ app.post('/', function (req, res) {
     
     
     //load incoming yaml
-    var doc = yaml.load(req.rawBody);
+    var doc = yaml.load(req.body);
 
     // draw on your canvas
     draw.draw(doc, d3n);
@@ -33,22 +44,6 @@ app.post('/', function (req, res) {
     //res.setHeader("content-type", "image/png");
     //canvas.pngStream().pipe(res);
 });
-
-//https://stackoverflow.com/questions/18710225/node-js-get-raw-request-body-using-express
-app.use(function (req, res, next) {
-    req.rawBody = '';
-    req.setEncoding('utf8');
-
-    req.on('data', function (chunk) {
-        req.rawBody += chunk;
-    });
-
-    req.on('end', function () {
-        next();
-    });
-});
-
-app.use(bodyParser.raw());
 
 app.listen(3030, function () {
     console.log('Dld4e app listening on port 3030!');

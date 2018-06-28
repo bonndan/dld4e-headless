@@ -3,7 +3,9 @@
 function draw(doc, d3n) {
 
   var d3 = d3n.d3;
+  global.d3n = d3n;
   global.d3 = d3;
+
   const _process = require('./dld4e-process');
   const _conns = require('./dld4e-connections');
   const _groups = require('./dld4e-groups');
@@ -35,7 +37,7 @@ function draw(doc, d3n) {
     company: "Self",
     date: new Date().toLocaleDateString(),
     version: 1.01,
-    color: "orange",
+    color: "black",
     stroke: "orange",
     fill: "orange",
     heightPercentage: 6, // percent of total height
@@ -56,7 +58,7 @@ function draw(doc, d3n) {
   //document.body.style.background = diagram.fill
 
   // find a good fit for the diagram
-  var parentBox = d3.select(d3n.document.querySelector("#svg")).node().getBoundingClientRect()
+  var parentBox = {bottom: 0, height: 2048, left: 0, right: 0, top: 0, width: 2048} //d3.select(d3n.document.querySelector("#svg")).node().getBoundingClientRect()
   var ratios = diagram.aspectRatio.split(':')
 
   // set the desired h/w
@@ -107,8 +109,8 @@ function draw(doc, d3n) {
 
   // and add the svg
   var svg = d3.select(d3n.document.querySelector("#svg")).append("svg")
-    .attr("width", 2048) //parentBox.width
-    .attr("height", 1024)
+    .attr("width", parentBox.width)
+    .attr("height", parentBox.height)
     .style("background-color", diagram.fill)
     .call(d3.zoom().on("zoom", function () {
       svg.attr("transform", d3.event.transform)
