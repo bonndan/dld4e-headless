@@ -6,12 +6,24 @@ See dld4e.com
 
 ## Usage
 
- Test with
+ Run with
 
+        docker run bonndan/dld4e-headless:latest -p 3030:3030
+
+Test with
+
+        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml" --data-binary @- http://localhost:3030 > /tmp/groups.png
+
+## Development
+
+This app requires graphicsmagick.
+
+        sudo apt-get install graphicsmagick
         npm install
-        node src/index.js
-        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml" --data-binary @- http://localhost:3030 > /tmp/groups.svg
 
+ Run with
+
+        node src/index.js
 
 ## License
 
