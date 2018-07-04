@@ -19,14 +19,14 @@ Test with
 
 ## Development
 
-This app requires graphicsmagick.
+This app requires imagemagick.
 
-        sudo apt-get install graphicsmagick
+        sudo apt-get install imagemagick
         npm install
 
  Run with
 
-        node src/index.js
+        node --inspect src/index.js
 
 ## License
 
