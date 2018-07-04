@@ -2,6 +2,9 @@
 
 Send dld4e.com yaml files to this service to obtain server side rendered network diagrams.
 
+![Groups](https://raw.githubusercontent.com/bonndan/dld4e-headless/master/examples/groups.png)
+
+
 See dld4e.com
 
 ## Usage
