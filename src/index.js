@@ -9,6 +9,7 @@ const yaml = require('js-yaml')
 const D3Node = require('d3-node')
 const draw = require('../src/dld4e/dld4e-draw.js')
 const Inkscape = require('inkscape')
+const str = require('string-to-stream')
 //serving static assets as workaround
 app.use('/images', express.static('images'))
 
@@ -30,43 +31,17 @@ app.post('/', function (req, res) {
     Promise.all(draw.draw(doc, d3n)).then(
         function () {
 
-            if (req.accepts("image/svg+xml")) {
+            if (req.headers.accept === "image/svg+xml") {
                 console.log("Creating svg output")
                 res.setHeader('Content-Type', 'image/svg+xml')
                 res.write(d3n.svgString())
                 res.end()
             } else {
-                //http://eng.wealthfront.com/2011/12/22/converting-dynamic-svg-to-png-with-node-js-d3-and-imagemagick/
                 console.log("Creating png output")
                 res.setHeader('Content-Type', 'image/png')
 
                 svgToPdfConverter = new Inkscape(['-e']);
-                d3n.svgString().pipe(svgToPdfConverter).pipe(res);
-
-                /*
-                var args = ["svg:-", "png:-"]
-                var convert = require('child_process').spawn("convert", args)
-                convert.stdout.on('data', function (data) {
-                    res.write(data)
-                })
-
-                convert.on('error', function (code) {
-                    console.log("error: " + code)
-                })
-                convert.on('close', function (code) {
-                    console.log("Closed: " + code)
-                    res.end()
-                })
-                convert.on('exit', function (code) {
-                    console.log("Child exited with " + code)
-                    res.end()
-                })
-                convert.stderr.on('data', (data) => {
-                    console.error(`child stderr:\n${data}`);
-                });
-                convert.stdin.write(d3n.svgString())
-                convert.stdin.end()
-                */
+                str(d3n.svgString()).pipe(svgToPdfConverter).pipe(res);
             }
         }
     )
