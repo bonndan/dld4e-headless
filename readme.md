@@ -9,13 +9,17 @@ See dld4e.com
 
 ## Usage
 
- Run with
+Run with
 
         docker run bonndan/dld4e-headless:latest -p 3030:3030
 
-Test with
+Test SVG generation ((send accept header) with
 
-        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml" --data-binary @- http://localhost:3030 > /tmp/groups.png
+        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml" -H "Accept: image/svg+xml" --data-binary @- http://localhost:3030 > /tmp/groups.svg
+
+Test PNG generation (default) with
+
+        cat examples/groups.yaml | curl -v -X POST -H "Content-Type: text/yaml"  --data-binary @- http://localhost:3030 > /tmp/groups.png
 
 ## Development
 
