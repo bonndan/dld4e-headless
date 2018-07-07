@@ -28,6 +28,10 @@ This app requires imagemagick.
 
         node --inspect src/index.js
 
+or for debugging in docker
+
+        docker run -p 3030:3030 -p 9229:9229 bonndan/dld4e-headless:latest
+
 ## License
 
 This project is licensed under the MIT License. [MIT License](http://www.opensource.org/licenses/MIT).

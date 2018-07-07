@@ -1,16 +1,16 @@
 
-var express = require('express');
+var express = require('express')
 var bodyParser = require('body-parser')
 var app = express()
-global.fetch = require('node-fetch-polyfill');
+global.fetch = require('node-fetch-polyfill')
 
 //const canvasModule = require('canvas');
-const yaml = require('js-yaml');
+const yaml = require('js-yaml')
 const D3Node = require('d3-node')
-const draw = require('../src/dld4e/dld4e-draw.js');
-
+const draw = require('../src/dld4e/dld4e-draw.js')
+const Inkscape = require('inkscape')
 //serving static assets as workaround
-app.use('/images', express.static('images'));
+app.use('/images', express.static('images'))
 
 
 
@@ -39,6 +39,11 @@ app.post('/', function (req, res) {
                 //http://eng.wealthfront.com/2011/12/22/converting-dynamic-svg-to-png-with-node-js-d3-and-imagemagick/
                 console.log("Creating png output")
                 res.setHeader('Content-Type', 'image/png')
+
+                svgToPdfConverter = new Inkscape(['-e']);
+                d3n.svgString().pipe(svgToPdfConverter).pipe(res);
+
+                /*
                 var args = ["svg:-", "png:-"]
                 var convert = require('child_process').spawn("convert", args)
                 convert.stdout.on('data', function (data) {
@@ -61,6 +66,7 @@ app.post('/', function (req, res) {
                 });
                 convert.stdin.write(d3n.svgString())
                 convert.stdin.end()
+                */
             }
         }
     )
