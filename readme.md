@@ -11,7 +11,7 @@ See dld4e.com
 
 Run with
 
-        docker run bonndan/dld4e-headless:latest -p 3030:3030
+        docker run -p 3030:3030 bonndan/dld4e-headless:latest 
 
 Test SVG generation ((send accept header) with
 
