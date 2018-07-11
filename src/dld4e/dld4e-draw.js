@@ -58,7 +58,7 @@ function draw(doc, d3n) {
   //document.body.style.background = diagram.fill
 
   // find a good fit for the diagram
-  var parentBox = { bottom: 0, height: 2048, left: 0, right: 0, top: 0, width: 2048 } //d3.select(d3n.document.querySelector("#svg")).node().getBoundingClientRect()
+  var parentBox = { bottom: 0, height: 1024, left: 0, right: 0, top: 0, width: 1024 } //d3.select(d3n.document.querySelector("#svg")).node().getBoundingClientRect()
   var ratios = diagram.aspectRatio.split(':')
 
   // set the desired h/w
